@@ -1,0 +1,5 @@
+{
+  "name": "RxBOT",
+  "description": "Professional pharmaceutical information lookup dashboard providing ATC codes, pack sizes, forms, and dosages via Google Search grounding.",
+  "requestFramePermissions": []
+}
