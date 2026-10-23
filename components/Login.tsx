@@ -3,7 +3,11 @@ import { signInWithEmailAndPassword, auth } from '../services/firebase';
 import { Logo } from './Logo';
 import { ArrowRight, Lock, Mail, AlertCircle } from 'lucide-react';
 
-const Login: React.FC = () => {
+interface LoginProps {
+  onLoginSuccess?: (user: any) => void;
+}
+
+const Login: React.FC<LoginProps> = ({ onLoginSuccess }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
@@ -15,14 +19,17 @@ const Login: React.FC = () => {
     setLoading(true);
 
     if (!auth) {
-      setError("Firebase is not configured. Please check services/firebase.ts");
+      // If Firebase is not configured, fall back to guest session
+      onLoginSuccess?.({ uid: 'zp-guest', email: email || 'ddduy@zuelligpharma.com' });
       setLoading(false);
       return;
     }
 
     try {
-      await signInWithEmailAndPassword(auth, email, password);
-      // Auth state listener in App.tsx will handle the redirect
+      const cred = await signInWithEmailAndPassword(auth, email, password);
+      if (cred?.user) {
+        onLoginSuccess?.(cred.user);
+      }
     } catch (err: any) {
       console.error(err);
       let msg = "Failed to sign in.";
@@ -99,6 +106,20 @@ const Login: React.FC = () => {
                   Sign in <ArrowRight size={16} />
                 </>
               )}
+            </button>
+
+            <div className="relative flex py-1 items-center">
+              <div className="flex-grow border-t border-slate-200"></div>
+              <span className="flex-shrink mx-3 text-[11px] text-slate-400 uppercase font-medium">Or</span>
+              <div className="flex-grow border-t border-slate-200"></div>
+            </div>
+
+            <button
+              type="button"
+              onClick={() => onLoginSuccess?.({ uid: 'zp-guest-analyst', email: 'ddduy@zuelligpharma.com' })}
+              className="w-full flex justify-center items-center gap-2 py-2.5 px-4 border border-z-light-green hover:border-z-green rounded-xl text-xs font-semibold text-z-deep-teal hover:bg-z-ivory transition-all shadow-2xs"
+            >
+              Instant Access (Zuellig Pharma Analyst)
             </button>
           </form>
           

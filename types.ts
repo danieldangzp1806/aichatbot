@@ -14,23 +14,27 @@ export interface GroundingMetadata {
 
 export interface MedicineSummary {
   name: string;
+  genericName?: string;
   manufacturer: string;
   atcCode: string;
   packSize: string;
   form: string;
   dosage: string;
+  market?: string;
 }
 
 export interface AnalysisResult {
   summary?: MedicineSummary;
   details: string;
   groundingMetadata?: GroundingMetadata;
+  fromCache?: boolean;
 }
 
 export interface SearchState {
   isLoading: boolean;
   hasSearched: boolean;
   query: string;
+  market?: string;
   result?: AnalysisResult;
   error?: string;
 }

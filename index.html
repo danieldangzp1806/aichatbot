@@ -80,24 +80,104 @@
       .focus-animate-placeholder:focus::placeholder {
         animation: placeholder-focus-fade 0.8s ease-in-out forwards;
       }
+
+      /* 7-Color Rainbow Rotating Border Effect */
+      @keyframes rainbow-rotate {
+        from {
+          transform: translate(-50%, -50%) rotate(0deg);
+        }
+        to {
+          transform: translate(-50%, -50%) rotate(360deg);
+        }
+      }
+
+      .rainbow-border-wrapper {
+        position: relative;
+        border-radius: 1rem;
+        padding: 2.5px;
+        overflow: hidden;
+      }
+
+      .rainbow-border-wrapper::before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 1400px;
+        height: 1400px;
+        transform: translate(-50%, -50%);
+        background: conic-gradient(
+          #ff1744, /* 1. Red */
+          #ff9100, /* 2. Orange */
+          #ffea00, /* 3. Yellow */
+          #00e676, /* 4. Green */
+          #00b0ff, /* 5. Blue */
+          #3d5afe, /* 6. Indigo */
+          #d500f9, /* 7. Violet */
+          #ff1744  /* Loop back to Red */
+        );
+        animation: rainbow-rotate 3.5s linear infinite;
+        z-index: 0;
+      }
+
+      .rainbow-glow {
+        position: absolute;
+        inset: -3px;
+        border-radius: 1.25rem;
+        overflow: hidden;
+        filter: blur(14px);
+        opacity: 0.6;
+        pointer-events: none;
+      }
+
+      .rainbow-glow::before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 1400px;
+        height: 1400px;
+        transform: translate(-50%, -50%);
+        background: conic-gradient(
+          #ff1744,
+          #ff9100,
+          #ffea00,
+          #00e676,
+          #00b0ff,
+          #3d5afe,
+          #d500f9,
+          #ff1744
+        );
+        animation: rainbow-rotate 3.5s linear infinite;
+      }
     </style>
-  <script type="importmap">
-{
-  "imports": {
-    "react/": "https://aistudiocdn.com/react@^19.2.1/",
-    "react": "https://aistudiocdn.com/react@^19.2.1",
-    "@google/genai": "https://aistudiocdn.com/@google/genai@^1.31.0",
-    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.1/",
-    "lucide-react": "https://aistudiocdn.com/lucide-react@^0.556.0",
-    "firebase/app": "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js",
-    "firebase/auth": "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js",
-    "firebase/firestore": "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js",
-    "firebase/": "https://aistudiocdn.com/firebase@^12.6.0/"
-  }
-}
-</script>
-</head>
+    <link rel="stylesheet" href="/index.css">
+  </head>
   <body class="bg-gradient-to-tr from-z-sky via-z-pale-green to-z-light-green bg-fixed text-slate-900 font-sans antialiased">
     <div id="root"></div>
+    <script>
+      window.addEventListener('error', function(event) {
+        console.error('Captured window error:', event.error || event.message);
+        var root = document.getElementById('root');
+        if (root && (!root.innerHTML || root.innerHTML.trim() === '')) {
+          var errBox = document.getElementById('app-fallback-error');
+          if (!errBox) {
+            errBox = document.createElement('div');
+            errBox.id = 'app-fallback-error';
+            errBox.style.cssText = 'min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 1.5rem; font-family: sans-serif;';
+            errBox.innerHTML = '<div style="background: white; border-radius: 1rem; padding: 2rem; max-width: 500px; width: 100%; box-shadow: 0 10px 25px rgba(0,0,0,0.1); text-align: center; border: 1px solid #E4F2E7;">' +
+              '<h2 style="color: #204D4C; margin: 0 0 0.5rem; font-size: 1.25rem; font-weight: bold;">RxBOT Initializing</h2>' +
+              '<p style="color: #64748b; font-size: 0.875rem; margin-bottom: 1rem;">An unexpected script error occurred during initialization.</p>' +
+              '<pre style="background: #f8fafc; border: 1px solid #e2e8f0; padding: 0.75rem; border-radius: 0.5rem; font-size: 0.75rem; color: #dc2626; text-align: left; overflow-x: auto; white-space: pre-wrap;">' +
+              (event.message || 'Script error occurred') +
+              '</pre>' +
+              '<button onclick="window.location.reload()" style="margin-top: 1rem; padding: 0.6rem 1.25rem; background: #204D4C; color: white; border: none; border-radius: 0.75rem; font-size: 0.875rem; font-weight: 500; cursor: pointer;">Reload Application</button>' +
+              '</div>';
+            document.body.appendChild(errBox);
+          }
+        }
+      });
+    </script>
+    <script type="module" src="/index.tsx"></script>
   </body>
 </html>
